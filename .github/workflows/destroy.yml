@@ -1,7 +1,7 @@
-name: Dev - Apply
+name: Dev - Destroy
 on: [workflow_dispatch]
 jobs:
-  TerraformApply:
+  TerraformDestroy:
     runs-on: self-hosted
     env:
       vault_token: ${{ secrets.vault_token }}
@@ -18,12 +18,11 @@ jobs:
             roboshop-infra/data/azure-sp ARM_CLIENT_SECRET | ARM_CLIENT_SECRET ;
             roboshop-infra/data/azure-sp ARM_TENANT_ID | ARM_TENANT_ID ;
             roboshop-infra/data/azure-sp ARM_SUBSCRIPTION_ID | ARM_SUBSCRIPTION_ID ;
-      - name: Terraform Apply
+      - name: Terraform Destroy
         run: |
           export ARM_CLIENT_ID="${{ env.ARM_CLIENT_ID }}"
           export ARM_CLIENT_SECRET="${{ env.ARM_CLIENT_SECRET }}"
           export ARM_TENANT_ID="${{ env.ARM_TENANT_ID }}"
           export ARM_SUBSCRIPTION_ID="${{ env.ARM_SUBSCRIPTION_ID }}"
-          az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
-          az aks get-credentials --name main-dev --resource-group ukwest-dev --overwrite-existing
-          make dev-apply token=${vault_token}
+          make dev-destroy token=${vault_token}
+
