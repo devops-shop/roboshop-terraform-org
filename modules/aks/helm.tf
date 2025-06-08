@@ -1,7 +1,17 @@
 resource "null_resource" "kubeconfig" {
-  depends_on = [azurerm_kubernetes_cluster.main]
+  depends_on = [
+    azurerm_kubernetes_cluster.main
+  ]
+
+  triggers = {
+    time = timestamp()
+  }
+
   provisioner "local-exec" {
-    command = "az aks get-credentials --name ${var.name} --resource-group ${var.rg_name} --overwrite-existing"
+    command = <<EOF
+az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+az aks get-credentials --name ${var.name} --resource-group ${var.rg_name} --overwrite-existing
+EOF
   }
 }
 
@@ -27,7 +37,7 @@ resource "null_resource" "external-secrets-secret-store" {
   ]
 
   provisioner "local-exec" {
-    command =<<TF
+    command = <<TF
 kubectl apply -f - <<KUBE
 apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
@@ -36,7 +46,7 @@ metadata:
 spec:
   provider:
     vault:
-      server: "http://vault-int.rdevopsb84.online:8200"
+      server: "http://vault-int.mydevops.shop:8200"
       path: "roboshop-${var.env}"
       version: "v2"
       auth:
@@ -56,4 +66,6 @@ KUBE
 TF
   }
 }
+
+
 
