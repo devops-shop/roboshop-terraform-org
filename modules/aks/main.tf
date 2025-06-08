@@ -25,6 +25,12 @@ resource "azurerm_kubernetes_cluster" "main" {
     dns_service_ip = "10.100.0.10"
   }
 
+  lifecycle {
+    ignore_changes = [
+      default_node_pool
+    ]
+  }
+
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "main" {
