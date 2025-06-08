@@ -1,0 +1,11 @@
+name: Dev - Apply
+on: [workflow_dispatch]
+jobs:
+  TerraformApply:
+    runs-on: [self-hosted, linux, x64]
+    env:
+      vault_token: ${{ secrets.vault_token }}
+    steps:
+      - name: Terraform Apply
+        run: |
+          make dev-apply token=${vault_token}
