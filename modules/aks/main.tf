@@ -44,5 +44,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   auto_scaling_enabled        = each.value["auto_scaling_enabled"]
   node_labels                 = each.value["node_labels"]
   temporary_name_for_rotation = "${each.key}temp"
+  vnet_subnet_id              = var.vnet_subnet_id
 }
 
