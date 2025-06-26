@@ -47,3 +47,12 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   vnet_subnet_id              = var.vnet_subnet_id
 }
 
+output "aks" {
+  value = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+}
+
+resource "azurerm_role_assignment" "aks-to-acr" {
+  scope                = data.azurerm_container_registry.main.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+}
