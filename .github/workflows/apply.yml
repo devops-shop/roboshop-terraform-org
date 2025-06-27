@@ -2,7 +2,7 @@ name: Dev - Apply
 on: [workflow_dispatch]
 jobs:
   TerraformApply:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       vault_token: ${{ secrets.vault_token }}
     steps:
