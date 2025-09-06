@@ -12,4 +12,7 @@ provider "vault" {
   token   = var.token
 }
 
+provider "kubernetes" {
+  config_path = "~/.kube/config"
+}
 
