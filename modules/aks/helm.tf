@@ -22,6 +22,14 @@ resource "null_resource" "external-secrets-secret-store" {
   ]
 
   provisioner "local-exec" {
+
+    command = <<EOT
+kubectl wait --for=condition=established --timeout=60s crd/clustersecretstores.external-secrets.io
+kubectl apply -f - <<KUBE
+...
+KUBE
+EOT
+
     command = <<TF
 kubectl apply -f - <<KUBE
 apiVersion: external-secrets.io/v1
