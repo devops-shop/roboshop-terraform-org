@@ -74,6 +74,12 @@ EOF
   }
 }
 
+resource "kubernetes_namespace" "external_secrets" {
+  metadata {
+    name = "devops"
+  }
+}
+
 resource "helm_release" "external-secrets" {
   depends_on = [
     null_resource.kubeconfig
@@ -82,7 +88,8 @@ resource "helm_release" "external-secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
-  namespace        = "devops"
+  # namespace        = "devops"
+  namespace        = kubernetes_namespace.external_secrets.metadata[0].name
   create_namespace = true
   version          = "0.9.13"
   set {
