@@ -1,3 +1,20 @@
+resource "null_resource" "kubeconfig" {
+  depends_on = [
+    azurerm_kubernetes_cluster.main
+  ]
+
+  triggers = {
+    time = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+az aks get-credentials --name ${var.name} --resource-group ${var.rg_name} --overwrite-existing
+EOF
+  }
+}
+
 resource "helm_release" "external-secrets" {
   depends_on = [
     null_resource.kubeconfig
@@ -8,11 +25,10 @@ resource "helm_release" "external-secrets" {
   chart            = "external-secrets"
   namespace        = "devops"
   create_namespace = true
-
-  values = [<<EOF
-installCRDs: true
-EOF
-  ]
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
 }
 
 resource "null_resource" "external-secrets-secret-store" {
@@ -50,3 +66,6 @@ KUBE
 TF
   }
 }
+
+
+
