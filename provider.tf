@@ -12,7 +12,27 @@ provider "vault" {
   token   = var.token
 }
 
-provider "kubernetes" {
-  config_path = "~/.kube/config"
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.29"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
+  }
 }
 
+# Kubernetes provider
+provider "kubernetes" {
+  config_path = "~/.kube/config"  # Path to your kubeconfig
+}
+
+# Helm provider
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
