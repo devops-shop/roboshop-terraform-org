@@ -7,7 +7,6 @@ resource "helm_release" "external-secrets" {
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
   namespace        = "devops"
-  version          = "0.9.13"
   create_namespace = true
 
   values = [<<EOF
