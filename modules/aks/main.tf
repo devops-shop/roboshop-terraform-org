@@ -88,10 +88,8 @@ resource "helm_release" "external-secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
-  # namespace        = "devops"
-  namespace        = kubernetes_namespace.external_secrets.metadata[0].name
+  namespace        = "devops"
   create_namespace = true
-  version          = "0.9.13"
   set {
     name  = "installCRDs"
     value = "true"
