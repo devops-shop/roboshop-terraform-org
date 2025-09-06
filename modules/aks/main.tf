@@ -74,12 +74,6 @@ EOF
   }
 }
 
-resource "kubernetes_namespace" "external_secrets" {
-  metadata {
-    name = "devops"
-  }
-}
-
 resource "helm_release" "external-secrets" {
   depends_on = [
     null_resource.kubeconfig
@@ -89,11 +83,13 @@ resource "helm_release" "external-secrets" {
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
   namespace        = "devops"
+  version          = "0.9.13"
   create_namespace = true
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
+
+  values = [<<EOF
+installCRDs: true
+EOF
+  ]
 }
 
 resource "null_resource" "external-secrets-secret-store" {
