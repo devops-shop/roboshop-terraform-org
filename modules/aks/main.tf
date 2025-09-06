@@ -84,6 +84,7 @@ resource "helm_release" "external-secrets" {
   chart            = "external-secrets"
   namespace        = "devops"
   create_namespace = true
+  version          = "0.9.13"
   set {
     name  = "installCRDs"
     value = "true"
