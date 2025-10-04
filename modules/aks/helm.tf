@@ -25,10 +25,10 @@ resource "helm_release" "external-secrets" {
   chart            = "external-secrets"
   namespace        = "devops"
   create_namespace = true
-  values = [<<EOF
-installCRDs: true
-EOF
-  ]
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
 }
 
 resource "null_resource" "external-secrets-secret-store" {
@@ -66,6 +66,5 @@ KUBE
 TF
   }
 }
-
 
 
