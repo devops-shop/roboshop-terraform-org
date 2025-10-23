@@ -11,5 +11,5 @@ variable "token" {}
 variable "aks" {}
 variable "vnets" {}
 variable "tools_vnet_resource_id" {}
-
+variable "bastion_nodes" {}
 
