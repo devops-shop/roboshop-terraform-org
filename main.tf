@@ -30,6 +30,9 @@ module "databases" {
   type                       = "db"
 }
 
+output "subnet_ids" {
+  value = module.vnet.subnet_id
+}
 
 # module "applications" {
 #   depends_on                 = [ module.databases ]
