@@ -7,16 +7,19 @@ network_security_group_id  = "/subscriptions/eb986b09-9743-4aa1-b10f-53da04d8708
 databases = {
   mongodb = {
     rgname = "ukwest"
+    vnet_prefix   = "main"
+    subnet        = "main"
+    vm_size       = "Standard_B2s"
   }
-  rabbitmq = {
-    rgname = "ukwest"
-  }
-  mysql = {
-    rgname = "ukwest"
-  }
-  redis = {
-    rgname = "ukwest"
-  }
+  # rabbitmq = {
+  #   rgname = "ukwest"
+  # }
+  # mysql = {
+  #   rgname = "ukwest"
+  # }
+  # redis = {
+  #   rgname = "ukwest"
+  # }
 }
 applications = {
   catalogue = {
@@ -50,17 +53,29 @@ aks = {
     rgname = "ukwest"
     default_node_pool = {
       nodes   = 1
-      vm_size = "standard_d2_v4"
+      vm_size = "standard_d3_v2"
     }
     app_node_pool = {
       one = {
         max_count            = 10
         min_count            = 2
-        vm_size              = "standard_d2_v4"
+        vm_size              = "standard_d3_v2"
         auto_scaling_enabled = true
         node_labels = {
           "project/name" = "roboshop"
         }
+      }
+    }
+  }
+}
+
+vnets = {
+  main-dev = {
+    rgname        = "ukwest"
+    address_space = ["10.50.0.0/24"]
+    subnets = {
+      main = {
+        address_prefixes = ["10.50.0.0/24"]
       }
     }
   }
