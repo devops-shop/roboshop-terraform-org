@@ -10,6 +10,6 @@ variable "dns_record_rg_name" {}
 variable "token" {}
 variable "aks" {}
 variable "vnets" {}
-variable "tools_vnet_resource_id" {}
+# variable "tools_vnet_resource_id" {}
 
 
