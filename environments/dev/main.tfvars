@@ -69,7 +69,7 @@ aks = {
     subnet   = "main"
     default_node_pool = {
       nodes   = 1
-      vm_size = "standard_d3_v2"
+      vm_size = "standard_a2_v2"
     }
     app_node_pool = {
       one = {
