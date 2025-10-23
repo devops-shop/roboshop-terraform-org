@@ -14,7 +14,7 @@ module "vnet" {
   resource_group_name = module.resource-group[each.value["rgname"]].name
   subnets             = each.value["subnets"]
   env                 = var.env
-  # tools_vnet_resource_id    = var.tools_vnet_resource_id
+  tools_vnet_resource_id    = var.tools_vnet_resource_id
 }
 
 output "subnet_ids" {
