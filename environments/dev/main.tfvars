@@ -11,6 +11,7 @@ databases = {
     vnet_prefix   = "main"
     subnet        = "main"
     vm_size       = "Standard_B2s"
+    port          = 27017
   }
   # rabbitmq = {
   #   rgname = "ukwest"

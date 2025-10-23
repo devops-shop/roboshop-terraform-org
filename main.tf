@@ -18,13 +18,14 @@ module "vnet" {
 }
 
 output "subnet_ids" {
-  value = module.vnet["main-dev"].subnet_id["main"].address_prefixes
+  value = module.vnet["main-dev"].subnet["main"]
 }
 
 module "databases" {
   for_each                   = var.databases
   source                     = "./modules/vm"
-  ip_configuration_subnet_id = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet_id[each.value["subnet"]].id
+  ip_configuration_subnet_id = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet[each.value["subnet"]].id
+  subnet_cidr                = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet[each.value["subnet"]].address_prefixes
   name                       = each.key
   rg_name                    = module.resource-group[each.value["rgname"]].name
   rg_location                = module.resource-group[each.value["rgname"]].location
@@ -35,6 +36,7 @@ module "databases" {
   type                       = "db"
   vm_size                    = each.value["vm_size"]
   bastion_nodes              = var.bastion_nodes
+  port                       = each.value["port"]
 }
 
 

@@ -1,3 +1,3 @@
-output "subnet_id" {
+output "subnet" {
   value = azurerm_subnet.main
 }
