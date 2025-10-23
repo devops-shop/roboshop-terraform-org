@@ -1,9 +1,9 @@
-resource "azurerm_public_ip" "publicip" {
-  name                = var.name
-  location            = var.rg_location
-  resource_group_name = var.rg_name
-  allocation_method   = "Static"
-}
+# resource "azurerm_public_ip" "publicip" {
+#   name                = var.name
+#   location            = var.rg_location
+#   resource_group_name = var.rg_name
+#   allocation_method   = "Static"
+# }
 
 resource "azurerm_network_interface" "privateip" {
   name                = var.name
@@ -14,7 +14,25 @@ resource "azurerm_network_interface" "privateip" {
     name                          = var.name
     subnet_id                     = var.ip_configuration_subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip.id
+    # public_ip_address_id          = azurerm_public_ip.publicip.id
+  }
+}
+
+resource "azurerm_network_security_group" "main" {
+  name                = var.name
+  location            = var.rg_location
+  resource_group_name = var.rg_name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 }
 
