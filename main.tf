@@ -49,3 +49,5 @@ module "aks" {
   app_node_pool     = each.value["app_node_pool"]
   vnet_subnet_id    = var.ip_configuration_subnet_id
 }
+
+#
