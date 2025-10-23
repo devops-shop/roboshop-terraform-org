@@ -1,3 +1,3 @@
-output "subnet_id" {
-  value = azurerm_subnet.main
-}
+# output "subnet_id" {
+#   value = azurerm_subnet.main
+# }
