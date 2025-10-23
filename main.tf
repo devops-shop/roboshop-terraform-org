@@ -66,5 +66,5 @@ module "aks" {
   token             = var.token
   default_node_pool = each.value["default_node_pool"]
   app_node_pool     = each.value["app_node_pool"]
-  vnet_subnet_id    = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet[each.value["subnet"]].id[0]
+  vnet_subnet_id    = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet[each.value["subnet"]].id
 }
