@@ -56,15 +56,15 @@ module "databases" {
 #   type                       = "app"
 # }
 
-# module "aks" {
-#   for_each          = var.aks
-#   source            = "./modules/aks"
-#   name              = each.key
-#   rg_name           = module.resource-group[each.value["rgname"]].name
-#   rg_location       = module.resource-group[each.value["rgname"]].location
-#   env               = var.env
-#   token             = var.token
-#   default_node_pool = each.value["default_node_pool"]
-#   app_node_pool     = each.value["app_node_pool"]
-#   vnet_subnet_id    = var.ip_configuration_subnet_id
-# }
+module "aks" {
+  for_each          = var.aks
+  source            = "./modules/aks"
+  name              = each.key
+  rg_name           = module.resource-group[each.value["rgname"]].name
+  rg_location       = module.resource-group[each.value["rgname"]].location
+  env               = var.env
+  token             = var.token
+  default_node_pool = each.value["default_node_pool"]
+  app_node_pool     = each.value["app_node_pool"]
+  vnet_subnet_id    = module.vnet["${each.value["vnet_prefix"]}-${var.env}"].subnet[each.value["subnet"]].id
+}
