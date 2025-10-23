@@ -95,9 +95,9 @@ resource "null_resource" "ansible" {
     host     = azurerm_network_interface.privateip.private_ip_address
   }
 
-  triggers = {
-    always = timestamp()
-  }
+  # triggers = {
+  #   always = timestamp()
+  # }
 
   provisioner "remote-exec" {
     inline = [
