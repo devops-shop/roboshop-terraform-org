@@ -65,4 +65,4 @@ module "aks" {
   vnet_subnet_id    = var.ip_configuration_subnet_id
 }
 
-#
+##
