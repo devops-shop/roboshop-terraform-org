@@ -12,6 +12,7 @@ module "vnet" {
   location            = module.resource-group[each.value["rgname"]].location
   name                = each.key
   resource_group_name = module.resource-group[each.value["rgname"]].name
+  subnets             = each.value["subnets"]
 }
 
 module "databases" {
