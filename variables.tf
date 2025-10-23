@@ -9,5 +9,6 @@ variable "env" {}
 variable "dns_record_rg_name" {}
 variable "token" {}
 variable "aks" {}
+variable "vnets" {}
 
 
