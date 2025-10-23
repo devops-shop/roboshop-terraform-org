@@ -36,7 +36,7 @@ resource "azurerm_network_security_group" "main" {
   }
 
   security_rule {
-    name                       = "var.name"
+    name                       = var.name
     priority                   = 101
     direction                  = "Inbound"
     access                     = "Allow"
