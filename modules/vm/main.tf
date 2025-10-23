@@ -1,9 +1,9 @@
-resource "azurerm_public_ip" "publicip" {
-  name                = var.name
-  location            = var.rg_location
-  resource_group_name = var.rg_name
-  allocation_method   = "Static"
-}
+# resource "azurerm_public_ip" "publicip" {
+#   name                = var.name
+#   location            = var.rg_location
+#   resource_group_name = var.rg_name
+#   allocation_method   = "Static"
+# }
 
 resource "azurerm_network_interface" "privateip" {
   name                = var.name
@@ -14,7 +14,25 @@ resource "azurerm_network_interface" "privateip" {
     name                          = var.name
     subnet_id                     = var.ip_configuration_subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.publicip.id
+    # public_ip_address_id          = azurerm_public_ip.publicip.id
+  }
+}
+
+resource "azurerm_network_security_group" "main" {
+  name                = var.name
+  location            = var.rg_location
+  resource_group_name = var.rg_name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 }
 
@@ -53,33 +71,33 @@ resource "azurerm_virtual_machine" "vm" {
   }
 }
 
-resource "null_resource" "ansible" {
-  depends_on = [
-    azurerm_virtual_machine.vm
-  ]
-  connection {
-    type     = "ssh"
-    user     = data.vault_generic_secret.ssh.data["username"]
-    password = data.vault_generic_secret.ssh.data["password"]
-    host     = azurerm_network_interface.privateip.private_ip_address
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo dnf install python3.12 python3.12-pip -y",
-      "sudo pip3.12 install ansible hvac",
-      "ansible-pull -i localhost, -U https://github.com/glasshouse747/roboshop-ansible roboshop.yml -e role_name=${local.role_name} -e app_name=${var.name} -e env=dev -e token=${var.token}"
-    ]
-  }
-}
-
-
-resource "azurerm_dns_a_record" "dns_record" {
-  name                = "${var.name}-dev"
-  zone_name           = var.zone_name
-  resource_group_name = var.dns_record_rg_name
-  ttl                 = 3
-  records             = [azurerm_network_interface.privateip.private_ip_address]
-}
-
-
+# resource "null_resource" "ansible" {
+#   depends_on = [
+#     azurerm_virtual_machine.vm
+#   ]
+#   connection {
+#     type     = "ssh"
+#     user     = data.vault_generic_secret.ssh.data["username"]
+#     password = data.vault_generic_secret.ssh.data["password"]
+#     host     = azurerm_network_interface.privateip.private_ip_address
+#   }
+#
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sudo dnf install python3.12 python3.12-pip -y",
+#       "sudo pip3.12 install ansible hvac",
+#       "ansible-pull -i localhost, -U https://github.com/glasshouse747/roboshop-ansible roboshop.yml -e role_name=${local.role_name} -e app_name=${var.name} -e env=dev -e token=${var.token}"
+#     ]
+#   }
+# }
+#
+#
+# resource "azurerm_dns_a_record" "dns_record" {
+#   name                = "${var.name}-dev"
+#   zone_name           = var.zone_name
+#   resource_group_name = var.dns_record_rg_name
+#   ttl                 = 3
+#   records             = [azurerm_network_interface.privateip.private_ip_address]
+# }
+#
+#
