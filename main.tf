@@ -35,6 +35,7 @@ module "databases" {
   type                       = "db"
   vm_size                    = each.value["vm_size"]
 }
+
 # module "applications" {
 #   depends_on                 = [ module.databases ]
 #   for_each                   = var.applications
