@@ -12,6 +12,7 @@ module "resource-group" {
 #     }
 #   }
 # }
+#
 
 module "vnet" {
   for_each            = var.vnets
