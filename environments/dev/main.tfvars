@@ -13,27 +13,27 @@ databases = {
     vm_size       = "Standard_B2s"
     port          = 27017
   }
-  rabbitmq = {
-    rgname = "ukwest"
-    vnet_prefix   = "main"
-    subnet        = "main"
-    vm_size       = "Standard_B2s"
-    port          = 5672
-  }
-  mysql = {
-    rgname = "ukwest"
-    vnet_prefix   = "main"
-    subnet        = "main"
-    vm_size       = "Standard_B2s"
-    port          = 3306
-  }
-  redis = {
-    rgname = "ukwest"
-    vnet_prefix   = "main"
-    subnet        = "main"
-    vm_size       = "Standard_B2s"
-    port          = 6379
-  }
+  # rabbitmq = {
+  #   rgname = "ukwest"
+  #   vnet_prefix   = "main"
+  #   subnet        = "main"
+  #   vm_size       = "Standard_B2s"
+  #   port          = 5672
+  # }
+  # mysql = {
+  #   rgname = "ukwest"
+  #   vnet_prefix   = "main"
+  #   subnet        = "main"
+  #   vm_size       = "Standard_B2s"
+  #   port          = 3306
+  # }
+  # redis = {
+  #   rgname = "ukwest"
+  #   vnet_prefix   = "main"
+  #   subnet        = "main"
+  #   vm_size       = "Standard_B2s"
+  #   port          = 6379
+  # }
 }
 applications = {
   catalogue = {
@@ -98,3 +98,9 @@ vnets = {
 }
 
 bastion_nodes = ["10.0.0.101", "10.0.0.11"]
+
+des_keys = {
+  devops = {
+    rgname = "ukwest"
+  }
+}

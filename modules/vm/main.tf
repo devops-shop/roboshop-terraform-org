@@ -65,67 +65,97 @@ resource "azurerm_network_interface_security_group_association" "nsg-attach" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 
-resource "azurerm_virtual_machine" "vm" {
-  name                          = var.name
-  location                      = var.rg_location
-  resource_group_name           = var.rg_name
-  network_interface_ids         = [azurerm_network_interface.privateip.id]
-  vm_size                       = var.vm_size
-  delete_os_disk_on_termination = true
+resource "azurerm_linux_virtual_machine" "main" {
+  name                            = var.name
+  location                        = var.rg_location
+  resource_group_name             = var.rg_name
+  network_interface_ids           = [azurerm_network_interface.privateip.id]
+  size                            = var.vm_size
+  admin_username                  = data.vault_generic_secret.ssh.data["username"]
+  admin_password                  = data.vault_generic_secret.ssh.data["password"]
+  disable_password_authentication = false
 
-  storage_image_reference {
-    id = var.storage_image_reference_id
+  os_disk {
+    caching                = "ReadWrite"
+    storage_account_type   = "Standard_LRS"
+    disk_encryption_set_id = var.disk_encryption_set_id
+    #     name              = "${var.name}-disk"
+    #     caching           = "ReadWrite"
+    #     create_option     = "FromImage"
+    #     managed_disk_type = "Standard_LRS"
   }
 
-  storage_os_disk {
-    name              = "${var.name}-disk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
   }
 
-  os_profile {
-    computer_name  = var.name
-    admin_username = data.vault_generic_secret.ssh.data["username"]
-    admin_password = data.vault_generic_secret.ssh.data["password"]
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
 }
 
 
-resource "null_resource" "ansible" {
-  depends_on = [
-    azurerm_virtual_machine.vm
-  ]
-  connection {
-    type     = "ssh"
-    user     = data.vault_generic_secret.ssh.data["username"]
-    password = data.vault_generic_secret.ssh.data["password"]
-    host     = azurerm_network_interface.privateip.private_ip_address
-  }
-
-  # triggers = {
-  #   always = timestamp()
-  # }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo dnf install python3.12 python3.12-pip -y",
-      "sudo pip3.12 install ansible hvac",
-      "ansible-pull -i localhost, -U https://github.com/glasshouse747/roboshop-ansible roboshop.yml -e role_name=${local.role_name} -e app_name=${var.name} -e env=dev -e token=${var.token}"
-    ]
-  }
-}
-
-
-resource "azurerm_dns_a_record" "dns_record" {
-  name                = "${var.name}-dev"
-  zone_name           = var.zone_name
-  resource_group_name = var.dns_record_rg_name
-  ttl                 = 3
-  records             = [azurerm_network_interface.privateip.private_ip_address]
-}
+# resource "azurerm_virtual_machine" "vm" {
+#   name                          = var.name
+#   location                      = var.rg_location
+#   resource_group_name           = var.rg_name
+#   network_interface_ids         = [azurerm_network_interface.privateip.id]
+#   vm_size                       = var.vm_size
+#   delete_os_disk_on_termination = true
+#
+#   storage_image_reference {
+#     id = var.storage_image_reference_id
+#   }
+#
+#   storage_os_disk {
+#     name              = "${var.name}-disk"
+#     caching           = "ReadWrite"
+#     create_option     = "FromImage"
+#     managed_disk_type = "Standard_LRS"
+#   }
+#
+#   os_profile {
+#     computer_name  = var.name
+#     admin_username = data.vault_generic_secret.ssh.data["username"]
+#     admin_password = data.vault_generic_secret.ssh.data["password"]
+#   }
+#
+#   os_profile_linux_config {
+#     disable_password_authentication = false
+#   }
+# }
+#
+#
+# resource "null_resource" "ansible" {
+#   depends_on = [
+#     azurerm_virtual_machine.vm
+#   ]
+#   connection {
+#     type     = "ssh"
+#     user     = data.vault_generic_secret.ssh.data["username"]
+#     password = data.vault_generic_secret.ssh.data["password"]
+#     host     = azurerm_network_interface.privateip.private_ip_address
+#   }
+#
+#   # triggers = {
+#   #   always = timestamp()
+#   # }
+#
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sudo dnf install python3.12 python3.12-pip -y",
+#       "sudo pip3.12 install ansible hvac",
+#       "ansible-pull -i localhost, -U https://github.com/glasshouse747/roboshop-ansible roboshop.yml -e role_name=${local.role_name} -e app_name=${var.name} -e env=dev -e token=${var.token}"
+#     ]
+#   }
+# }
+#
+#
+# resource "azurerm_dns_a_record" "dns_record" {
+#   name                = "${var.name}-dev"
+#   zone_name           = var.zone_name
+#   resource_group_name = var.dns_record_rg_name
+#   ttl                 = 3
+#   records             = [azurerm_network_interface.privateip.private_ip_address]
+# }
 
