@@ -85,16 +85,16 @@ resource "azurerm_linux_virtual_machine" "main" {
     #     managed_disk_type = "Standard_LRS"
   }
 
-  # source_image_reference {
-  #   publisher = "Canonical"
-  #   offer     = "0001-com-ubuntu-server-jammy"
-  #   sku       = "22_04-lts"
-  #   version   = "latest"
-  # }
-
-  storage_image_reference {
-    id = var.storage_image_reference_id
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
   }
+
+  # storage_image_reference {
+  #   id = var.storage_image_reference_id
+  # }
 
 }
 
