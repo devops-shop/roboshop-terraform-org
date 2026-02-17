@@ -69,7 +69,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                            = var.name
   location                        = var.rg_location
   resource_group_name             = var.rg_name
-  network_interface_ids           = [azurerm_network_interface.privateip.id]
+  network_interface_ids = [azurerm_network_interface.privateip.id]
   size                            = var.vm_size
   admin_username                  = data.vault_generic_secret.ssh.data["username"]
   admin_password                  = data.vault_generic_secret.ssh.data["password"]
@@ -92,10 +92,12 @@ resource "azurerm_linux_virtual_machine" "main" {
   #   version   = "latest"
   # }
 
-  storage_image_reference {
-    id = var.storage_image_reference_id
-  }
+  #   storage_image_reference {
+  #     id = var.storage_image_reference_id
+  #   }
+  # }
 
+  source_image_id = var.storage_image_reference_id
 }
 
 
