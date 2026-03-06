@@ -1,5 +1,5 @@
 resource "azurerm_private_dns_zone" "main" {
-  name                = "roboshop.mysql.mydevops.shop"
+  name                = "roboshop.mysql.database.azure.com"
   resource_group_name = var.rg_name
 }
 
