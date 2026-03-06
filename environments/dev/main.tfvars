@@ -85,17 +85,6 @@ aks = {
   }
 }
 
-vnets = {
-  main-dev = {
-    rgname        = "ukwest"
-    address_space = ["10.50.0.0/24"]
-    subnets = {
-      main = {
-        address_prefixes = ["10.50.0.0/24"]
-      }
-    }
-  }
-
   vnets = {
     main-dev = {
       rgname        = "ukwest"
@@ -123,10 +112,10 @@ des_keys = {
   }
 }
 
-mysql = {
-  main = {
-    rgname      = "ukwest"
-    vnet_prefix = "main"
-    subnet      = "main"
+  mysql = {
+    main = {
+      rgname      = "ukwest"
+      vnet_prefix = "ext1"
+      subnet      = "main"
+    }
   }
-}
