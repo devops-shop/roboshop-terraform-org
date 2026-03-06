@@ -96,22 +96,24 @@ vnets = {
     }
   }
 
-  ext1-dev = {
-    rgname        = "ukwest"
-    address_space = ["10.51.0.0/16"]
-    subnets = {
-      main = {
-        address_prefixes = ["10.51.0.0/24"]
-      }
-      delegations = {
-        mysql = {
-          name    = "Microsoft.DBforMySQL/flexibleServers"
-          actions = [ "Microsoft.Network/virtualNetworks/subnets/join/action" ]
+  vnets = {
+    main-dev = {
+      rgname        = "ukwest"
+      address_space = ["10.51.0.0/16"]
+      subnets = {
+        main = {
+          address_prefixes = ["10.51.0.0/24"]
+          delegations = {
+            mysql = {
+              name    = "Microsoft.DBforMySQL/flexibleServers"
+              actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+            }
+          }
         }
       }
     }
+
   }
-}
 
 
 
