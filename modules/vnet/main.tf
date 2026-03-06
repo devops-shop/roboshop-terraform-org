@@ -12,15 +12,17 @@ resource "azurerm_subnet" "main" {
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = each.value["address_prefixes"]
 
-  delegation {
-    name = "fs"
-    service_delegation {
-      name = "Microsoft.DBforMySQL/flexibleServers"
-      actions = [
-        "Microsoft.Network/virtualNetworks/subnets/join/action",
-      ]
+  dynamic "delegation" {
+    for_each = var.delegations
+    content {
+      name = delegation.key
+      service_delegation {
+        name = delegation.value["name"]
+        actions = delegation.value["actions"]
+      }
     }
   }
+
 }
 
 resource "azurerm_virtual_network_peering" "here-to-tools" {

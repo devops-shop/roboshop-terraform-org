@@ -95,7 +95,25 @@ vnets = {
       }
     }
   }
+
+  ext1-dev = {
+    rgname        = "ukwest"
+    address_space = ["10.51.0.0/16"]
+    subnets = {
+      main = {
+        address_prefixes = ["10.51.0.0/24"]
+      }
+      delegations = {
+        mysql = {
+          name    = "Microsoft.DBforMySQL/flexibleServers"
+          actions = [ "Microsoft.Network/virtualNetworks/subnets/join/action" ]
+        }
+      }
+    }
+  }
 }
+
+
 
 bastion_nodes = ["10.0.0.101", "10.0.0.11"]
 
