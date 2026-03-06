@@ -9,28 +9,28 @@ databases = {
   mongodb = {
     rgname = "ukwest"
     vnet_prefix   = "main"
-    subnet        = "main"
+    subnet        = "vm"
     vm_size       = "Standard_B2s"
     port          = 27017
   }
   rabbitmq = {
     rgname = "ukwest"
     vnet_prefix   = "main"
-    subnet        = "main"
+    subnet        = "vm"
     vm_size       = "Standard_B2s"
     port          = 5672
   }
   mysql = {
     rgname = "ukwest"
     vnet_prefix   = "main"
-    subnet        = "main"
+    subnet        = "vm"
     vm_size       = "Standard_B2s"
     port          = 3306
   }
   redis = {
     rgname = "ukwest"
     vnet_prefix   = "main"
-    subnet        = "main"
+    subnet        = "vm"
     vm_size       = "Standard_B2s"
     port          = 6379
   }
@@ -85,24 +85,41 @@ aks = {
   }
 }
 
-  vnets = {
-    main-dev = {
-      rgname        = "ukwest"
-      address_space = ["10.51.0.0/16"]
-      subnets = {
-        main = {
-          address_prefixes = ["10.51.0.0/24"]
-          delegations = {
-            mysql = {
-              name    = "Microsoft.DBforMySQL/flexibleServers"
-              actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
-            }
+vnets = {
+  main-dev = {
+    rgname        = "ukwest"
+    address_space = ["10.51.0.0/16"]
+    subnets = {
+      main = {
+        address_prefixes = ["10.51.0.0/24"]
+        delegations = {
+          mysql = {
+            name    = "Microsoft.DBforMySQL/flexibleServers"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+          }
+        }
+      }
+      aks = {
+        address_prefixes = ["10.51.1.0/24"]
+        delegations = {}
+      }
+      vm = {
+        address_prefixes = ["10.51.2.0/24"]
+        delegations = {}
+      }
+      agw = {
+        address_prefixes = ["10.51.3.0/24"]
+        delegations = {
+          agw = {
+            name    = "Microsoft.Network/applicationGateways"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
           }
         }
       }
     }
-
   }
+
+}
 
 bastion_nodes = ["10.0.0.101", "10.0.0.11"]
 
@@ -115,7 +132,15 @@ des_keys = {
   mysql = {
     main = {
       rgname      = "ukwest"
-      vnet_prefix = "ext1"
+      vnet_prefix = "main"
       subnet      = "main"
     }
   }
+
+application_gateway = {
+  main = {
+    rgname      = "ukwest"
+    vnet_prefix = "main"
+    subnet      = "agw"
+  }
+}
